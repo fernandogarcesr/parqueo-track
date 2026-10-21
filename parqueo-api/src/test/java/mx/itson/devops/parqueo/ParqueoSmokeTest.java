@@ -1,5 +1,11 @@
 package mx.itson.devops.parqueo;
 
+import mx.itson.devops.parqueo.Estacionamiento;
+import mx.itson.devops.parqueo.Estacionamiento;
+import mx.itson.devops.parqueo.PaseDescuento;
+import mx.itson.devops.parqueo.PaseDescuento;
+import mx.itson.devops.parqueo.Tarifa;
+import mx.itson.devops.parqueo.Tarifa;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
