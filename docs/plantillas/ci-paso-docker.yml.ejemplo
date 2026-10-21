@@ -1,0 +1,11 @@
+# PLANTILLA para la Fase 9: paso extra al final de los steps de .github/workflows/ci.yml
+# Respeta la sangría: este "- name" va alineado con los otros pasos del job.
+
+      # Construyo la imagen en el runner para comprobar que el Dockerfile es válido.
+      # El tag es el SHA del commit: cada imagen queda ligada al commit exacto que la generó.
+      - name: Construir imagen Docker
+        run: docker build -t parqueo-api:${{ github.sha }} .
+
+      # NO hago docker push: el Nexus está en mi laptop (localhost) y el runner vive en la nube
+      # de GitHub; no se pueden ver sin exponer el Nexus a Internet. Subir la imagen al
+      # registro lo hago yo a mano desde mi laptop (Fase 9).

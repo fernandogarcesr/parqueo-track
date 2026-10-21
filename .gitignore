@@ -1,0 +1,23 @@
+# Lo que genera Maven (se reconstruye con mvn, nunca se versiona)
+target/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+nbproject/private/
+nbactions.xml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Secretos: NUNCA al repositorio
+.env
+settings.xml
+*.pem
+*.key
+
+# Archivos temporales
+*.log
+*.tar

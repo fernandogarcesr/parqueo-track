@@ -1,0 +1,11 @@
+# =====================================================================================
+# Dockerfile de UNA sola etapa, SOLO para comparar tamaños en la Fase 9.
+# Constrúyelo con:  docker build -f docs/plantillas/Dockerfile.una-etapa -t parqueo-api:una-etapa .
+# La imagen final arrastra Maven + el JDK completo + el código fuente (500+ MB).
+# =====================================================================================
+FROM maven:3.9-eclipse-temurin-21
+WORKDIR /app
+COPY . .
+RUN mvn -B package -DskipTests -pl parqueo-api -am
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "parqueo-api/target/parqueo-api-1.0.0-SNAPSHOT.jar"]

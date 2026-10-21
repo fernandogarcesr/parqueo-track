@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  MÓDULO parqueo-api: la lógica del estacionamiento + un servidor HTTP mínimo (sin frameworks).
+  Genera un .jar ejecutable: java -jar parqueo-api-1.0.0-SNAPSHOT.jar
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- parent: de aquí heredo versión de Java, plugins, etc. -->
+  <parent>
+    <groupId>mx.itson.devops</groupId>
+    <artifactId>parqueo-track</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>parqueo-api</artifactId>
+  <packaging>jar</packaging>
+  <name>ParqueoTrack API</name>
+
+  <dependencies>
+    <!-- DEPENDENCIA: código de terceros que entra al classpath.
+         scope=test -> solo existe al compilar/correr src/test, NO en src/main ni en el jar. -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- PLUGIN: una tarea que se ejecuta durante el build (la versión viene del padre) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+
+      <!-- Le digo al .jar cuál es su clase main para poder hacer java -jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>mx.itson.devops.parqueo.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

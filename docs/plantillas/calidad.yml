@@ -1,0 +1,53 @@
+# =====================================================================================
+# PLANTILLA para la Fase 7: análisis de calidad con SonarQube Cloud.
+# Cópiala a .github/workflows/calidad.yml (la carpeta plantillas NO ejecuta nada).
+# =====================================================================================
+name: Calidad (SonarQube Cloud)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analisis:
+    # Este nombre exacto es el que seleccionas como check obligatorio en la protección de rama
+    name: Build, pruebas y análisis Sonar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+        with:
+          # Sonar compara contra el historial (qué es "código nuevo"). Sin el historial
+          # completo (por omisión checkout trae solo 1 commit) el análisis sale incompleto.
+          fetch-depth: 0
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # Guardo la caché del escáner de Sonar para que los siguientes runs sean más rápidos
+      - name: Caché del escáner de Sonar
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Compilar, probar y analizar
+        env:
+          # secrets.* = valores guardados en GitHub (Settings > Secrets). Nunca aparecen en el log.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # lo pone GitHub solo; Sonar lo usa para comentar en el PR
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # el que TÚ generas en SonarQube Cloud
+        run: >
+          mvn -B verify
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.organization=TU_ORGANIZACION
+          -Dsonar.projectKey=TU_PROJECT_KEY
+          -Dsonar.qualitygate.wait=true

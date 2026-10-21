@@ -1,0 +1,11 @@
+# Cópialo a la RAÍZ como ".dockerignore" (con el punto al inicio, sin extensión).
+# Lo que pongas aquí NO se envía a Docker al hacer "docker build ." -> build más rápido y
+# sin basura ni secretos dentro de la imagen.
+**/target
+.git
+.github
+.idea
+.vscode
+*.pem
+*.md
+docs

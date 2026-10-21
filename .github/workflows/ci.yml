@@ -1,0 +1,57 @@
+# =====================================================================================
+# WORKFLOW de integración continua (CI) de ParqueoTrack
+# Un workflow es un archivo .yml que le dice a GitHub qué hacer cuando pasa algo en el repo.
+# Tiene que vivir EXACTAMENTE en .github/workflows/ para que GitHub lo encuentre.
+# YAML: la sangría (espacios, NUNCA tabuladores) es parte de la sintaxis. Un espacio mal = error.
+# =====================================================================================
+
+# Nombre que se ve en la pestaña Actions
+name: CI
+
+# "on" = el TRIGGER: cuándo se dispara
+on:
+  push:                 # cada vez que alguien hace git push (a cualquier rama)
+  pull_request:         # y cada vez que se abre o se actualiza un Pull Request
+    branches: [main]    # ...pero solo los PR que van hacia main
+  workflow_dispatch:    # y también a mano desde el botón "Run workflow"
+
+jobs:
+  # Un job es un grupo de pasos que corre en UNA máquina. Este se llama "build" (el id).
+  build:
+    # name = lo que se ve en pantalla. Ojo: este nombre exacto es el que luego eliges
+    # como "check obligatorio" en la protección de rama (Fase 7).
+    name: Build y pruebas (Maven)
+
+    # runner = la máquina virtual que GitHub presta y destruye al terminar el job.
+    runs-on: ubuntu-latest
+
+    steps:
+      # "uses" = usar una acción ya hecha por alguien (como importar una librería).
+      # La máquina empieza VACÍA: sin mi código. Este paso lo descarga.
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      # El runner no sabe qué Java necesito, se lo instalo. cache: maven guarda las
+      # dependencias para que el siguiente run no las baje otra vez.
+      - name: Instalar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # "run" = un comando de terminal, igual que si lo escribiera yo.
+      # -B (batch) quita colores y barras de progreso para que el log sea limpio.
+      # verify recorre compile -> test -> package -> verify (si las pruebas fallan, se detiene).
+      - name: Compilar, probar y empaquetar
+        run: mvn -B verify
+
+      # Guardo los reportes de pruebas como "artefacto" del run para poder descargarlos.
+      # if: always() = que corra aunque el paso anterior haya fallado (justo cuando más los necesito).
+      - name: Guardar reportes de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: '**/target/surefire-reports/'
+          if-no-files-found: ignore

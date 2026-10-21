@@ -1,0 +1,19 @@
+<!--
+  PLANTILLA para la Fase 8. Pega este bloque en el pom.xml de la RAÍZ (el padre),
+  dentro de <project>, por ejemplo justo antes de <build>.
+
+  Los módulos lo heredan, así que con esto basta.
+  - Maven escoge solo: versión que termina en -SNAPSHOT -> snapshotRepository; cualquier otra -> repository.
+  - Los <id> deben coincidir con los <id> de tu settings.xml.
+  - Si tu Nexus está en tu laptop con el puerto 8091 (como en la guía), la URL lleva localhost:8091.
+-->
+<distributionManagement>
+  <repository>
+    <id>nexus-releases</id>
+    <url>http://localhost:8091/repository/maven-releases/</url>
+  </repository>
+  <snapshotRepository>
+    <id>nexus-snapshots</id>
+    <url>http://localhost:8091/repository/maven-snapshots/</url>
+  </snapshotRepository>
+</distributionManagement>

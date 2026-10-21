@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PLANTILLA para la Fase 8.
+  Cópiala a:  C:\Users\TU_USUARIO\.m2\settings.xml   (FUERA del repositorio)
+  Maven la lee en cada build. Aquí viven usuario y contraseña de Nexus.
+  NUNCA subas este archivo a GitHub.
+
+  Cada <id> debe ser IDÉNTICO al <id> del repositorio en <distributionManagement> del pom.xml.
+  El pom dice A DÓNDE publicar; este archivo dice CON QUÉ CREDENCIALES.
+-->
+<settings>
+  <servers>
+    <server>
+      <id>nexus-snapshots</id>
+      <username>TU_USUARIO_NEXUS</username>
+      <password>TU_CONTRASENA_NEXUS</password>
+    </server>
+    <server>
+      <id>nexus-releases</id>
+      <username>TU_USUARIO_NEXUS</username>
+      <password>TU_CONTRASENA_NEXUS</password>
+    </server>
+  </servers>
+</settings>
